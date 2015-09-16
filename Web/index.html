@@ -17,7 +17,7 @@
 </head>
 <body>
 
-<div id="content" class="container">
+<div class="container">
 
     <div class="jumbotron text-center">
         <h1>Post your ideas</h1>
@@ -26,44 +26,31 @@
     <div class="row">
         <!-- Sidebar -->
         <div class="col-sm-4">
-            <ul class="sidebar-nav">
-                <li>
-                    <a href="#"> About </a>
-                </li>
 
-                <li>
-                    <a href="#">
+            <div class="list-group">
+                <a class="list-group-item" href="#/"> <i class="fa fa-home fa-fw"></i> &nbsp;Home </a>
 
-                    </a>
-                </li>
-            </ul>
+                <a class="list-group-item" href="#/browse"> <i class="fa fa-book fa-fw"></i> &nbsp;Browse Ideas </a>
+
+                <a class="list-group-item" href="#"> <i class="fa fa-pencil fa-fw"></i> &nbsp;Post Your Idea </a>
+
+                <a class="list-group-item" href="#"> <i class="fa fa-github fa-fw"></i> &nbsp;Source </a>
+
+                <a class="list-group-item" href="#"> <i class="fa fa-envelope fa-fw"></i> &nbsp;Contact </a>
+            </div>
+
         </div>
 
         <!-- Content -->
-        <div class="col-sm-8">
-            <div id="about" class="panel panel-info">
-                <div class="panel-heading">About this site</div>
-                <div class="panel-body">
-                    <p>
-                        Got any ideas that you wish were real? Post them here!
-                    </p>
-
-                    <p>
-                        I'm not very creative but definitely very motivated to do something. Hopefully this site will
-                        help
-                        creative people meet other people like me and the world
-                        will be full of cool new innovative inventions.
-                    </p>
-                </div>
-            </div>
-        </div>
+        <div id="content" class="col-sm-8"></div>
     </div>
 
 </div>
 
 <!--JavaScript goes here-->
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sammy.js/0.7.6/sammy.min.js"></script>
 <script src="js/app.js"></script>
 
 </body>
