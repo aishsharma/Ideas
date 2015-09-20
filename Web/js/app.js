@@ -15,6 +15,11 @@ var app = $.sammy("#content", function() {
     this.get("#/browse", function(context) {
         loadContent("browse.html")
     });
+
+    //Post ideas
+    this.get("#/post", function(context) {
+        loadContent("post.html")
+    });
 });
 
 //Starts the app on page load
