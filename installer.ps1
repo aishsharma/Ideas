@@ -1,5 +1,3 @@
-virtualenv flask
-flask\Scripts\pip install flask
-flask\Scripts\pip install flask-login
-flask\Scripts\pip install flask-openid
-flask\Scripts\pip install flask-sqlalchemy
+virtualenv Idea-env
+Idea-env\Scripts\pip install bottle
+Idea-env\Scripts\pip install sqlalchemy
