@@ -2,6 +2,7 @@ from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 from sqlalchemy import create_engine
+
 from resources import config
 
 __author__ = 'Aishwarya Sharma'
@@ -27,7 +28,8 @@ class Comments(Base):
     content = Column(String, nullable=False)
 
 # Creating database engine for our table metadata
-engine = create_engine(config.db_url)
+print("URL: " + config.db_url)
+engine = create_engine(config.db_url, echo=True)
 
 # Creating all tables if they don't exist
 Base.metadata.create_all(engine)
