@@ -14,7 +14,7 @@ def init_db():
     dbSession = sessionmaker(bind=engine)
     session = dbSession()
 
-    idea = Idea(title = "Test", details = "Testing idea")
+    idea = Idea(title="Test", details="Testing idea")
 
     # Inserting an Idea
     session.add(idea)
