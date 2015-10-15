@@ -1,32 +1,38 @@
-//(function($) {
-    //Loads content from views
-    function loadContent(path) {
-        $("#content").load("views/" + path);
-    }
+//Any app config variables go here
+var config = {
+    API_URL: "http://localhost:8080/api"
+};
 
-    //Routes go here
-    var app = $.sammy("#content", function() {
-        //Home Page
-        this.get("#/", function(context) {
-            loadContent("about.html");
-        });
+//Loads content from views
+function loadContent(path, success) {
+    $("#content").load("views/" + path, success);
+}
 
-        //Browse Page
-        this.get("#/browse", function(context) {
-            loadContent("browse.html")
-
-            $("#results").append()
-        });
-
-        //Post ideas
-        this.get("#/post", function(context) {
-            loadContent("post.html")
-        });
+//Routes go here
+var app = $.sammy("#content", function() {
+    //Home Page
+    this.get("#/", function(context) {
+        loadContent("about.html");
     });
 
-    //Starts the app on page load
-    $(function() {
-        app.run("#/");
+    //Browse Page
+    this.get("#/browse", function(context) {
+        loadContent("browse.html", browseSuccess);
     });
 
-//}) (jQuery);
+    //Post ideas
+    this.get("#/post", function(context) {
+        loadContent("post.html")
+    });
+});
+
+//Starts the app on page load
+$(function() {
+    app.run("#/");
+});
+
+
+//Callback functions go here
+var browseSuccess = function() {
+    $("#results").append(config.API_URL);
+}

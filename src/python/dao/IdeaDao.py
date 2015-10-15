@@ -4,108 +4,29 @@ from sqlalchemy.orm import sessionmaker
 from models.IdeaModels import Base, Idea
 from resources import config
 
-# For Exceptions
-import sys
-
 __author__ = 'Aishwarya Sharma'
 
-
-def get_all_ideas():
-    engine = create_engine(config.db_url)
-    Base.metadata.bind = engine
-
-    db_session = sessionmaker(bind=engine)
-    session = db_session()
-
-    try:
-        session.begin()
-        results = session.query(Idea).order_by(Idea.timestamp.desc()).all()
-        session.commit()
-    except:
-        session.rollback()
-        raise Exception("Database Error: " + sys.exc_info()[1])
-    finally:
-        session.close()
-
-    return results
+__all__ = ["get_all_ideas", "get_idea", "add_or_update_idea", "search", "delete_idea"]
 
 
-def get_idea(id):
-    engine = create_engine(config.db_url)
-    Base.metadata.bind = engine
-
-    db_session = sessionmaker(bind=engine)
-    session = db_session()
-
-    try:
-        session.begin()
-        results = session.query(Idea).filter(Idea.id == id).one()
-        session.commit()
-    except:
-        session.rollback()
-        raise Exception("Database Error: " + sys.exc_info()[1])
-    finally:
-        session.close()
-
-    return results
+def get_all_ideas(session):
+    return [element.to_dict() for element in session.query(Idea).order_by(Idea.timestamp.desc()).all()]
 
 
-def search(text):
-    engine = create_engine(config.db_url)
-    Base.metadata.bind = engine
-
-    db_session = sessionmaker(bind=engine)
-    session = db_session()
-
-    try:
-        session.begin()
-        results = session.query(Idea).filter(Idea.title.like("%" + text + "%")).order_by(Idea.timestamp.desc()).all()
-        session.commit()
-    except:
-        session.rollback()
-        raise Exception("Database Error: " + sys.exc_info()[1])
-    finally:
-        session.close()
-
-    return results
+def get_idea(idea_id, session):
+    return session.query(Idea).filter(Idea.id == idea_id).one().to_dict()
 
 
-def delete_idea(idea_id):
-    engine = create_engine(config.db_url)
-    Base.metadata.bind = engine
+def search(text, session):
+    return session.query(Idea).filter(Idea.title.like("%" + text + "%")).order_by(Idea.timestamp.desc()).all()
 
-    db_session = sessionmaker(bind=engine)
-    session = db_session()
 
-    try:
-        session.begin()
-        result = session.query(Idea).filter(Idea.id == idea_id).one()
-        session.delete(result)
-        session.commit()
-    except:
-        session.rollback()
-        raise Exception("Database Error: " + sys.exc_info()[1])
-    finally:
-        session.close()
-
+def delete_idea(idea_id, session):
+    result = session.query(Idea).filter(Idea.id == idea_id).one()
+    session.delete(result)
     return True
 
 
-def add_or_update_idea(idea):
-    engine = create_engine(config.db_url)
-    Base.metadata.bind = engine
-
-    db_session = sessionmaker(bind=engine)
-    session = db_session()
-
-    try:
-        session.begin()
-        session.add(idea)
-        session.commit()
-    except:
-        session.rollback()
-        raise Exception("Database Error: " + sys.exc_info()[1])
-    finally:
-        session.close()
-
+def add_or_update_idea(idea, session):
+    session.add(idea)
     return True
