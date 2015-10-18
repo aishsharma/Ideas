@@ -1,5 +1,5 @@
 # For SQL Alchemy ORM
-from IdeaModels import Base, Idea
+from models.IdeaModels import Base, Idea
 
 __author__ = 'Aishwarya Sharma'
 
