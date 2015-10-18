@@ -1,6 +1,6 @@
 //Any app config variables go here
 var config = {
-	API_URL: "http://123.1.1.1:8080/api/",
+	API_URL: "http://0.0.0.0:8080/api/",
 	TEMPLATES: "templates/",
 	CONSTANTS: {
 		BROWSE: "Get All Ideas in database.",
