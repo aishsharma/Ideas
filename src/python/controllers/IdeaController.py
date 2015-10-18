@@ -3,7 +3,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 # My Imports
-from dao import IdeaDao
+from models import IdeaDao
 from models.IdeaModels import Idea, Base
 from resources import config
 import traceback
@@ -74,3 +74,25 @@ def validate(field):
         return False
     else:
         return True
+
+
+def search(text):
+    results = {"status": 200, "data": "", "error": ""}
+
+    # Creating a session for database access.
+    engine = create_engine(config.db_url)
+    Base.metadata.bind = engine
+
+    db_session = sessionmaker(bind=engine)
+    session = db_session()
+
+    try:
+        results["data"] = IdeaDao.search(text, session)
+        session.commit()
+    except:
+        session.rollback()
+        results["status"] = 500
+        results["error"] = "There was a database error.\n" + traceback.format_exc()
+    finally:
+        session.close()
+    return results

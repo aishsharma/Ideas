@@ -1,12 +1,7 @@
 # For SQL Alchemy ORM
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
-from models.IdeaModels import Base, Idea
-from resources import config
+from IdeaModels import Base, Idea
 
 __author__ = 'Aishwarya Sharma'
-
-__all__ = ["get_all_ideas", "get_idea", "add_or_update_idea", "search", "delete_idea"]
 
 
 def get_all_ideas(session):
@@ -18,7 +13,8 @@ def get_idea(idea_id, session):
 
 
 def search(text, session):
-    return session.query(Idea).filter(Idea.title.like("%" + text + "%")).order_by(Idea.timestamp.desc()).all()
+    return [element.to_dict() for element in session.query(Idea).filter(Idea.title.like("%" + text + "%"))
+            .order_by(Idea.timestamp.desc()).all()]
 
 
 def delete_idea(idea_id, session):

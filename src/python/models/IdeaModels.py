@@ -28,18 +28,6 @@ class Idea(Base, AllBase):
         return {"id": self.id, "title": self.title, "details": self.details, "timestamp": self.timestamp.__str__()}
 
 
-# Not in current scope, may implement in future if I feel like it
-# Comments people can leave on other's ideas
-# class Comment(Base, AllBase):
-#     __tablename__ = "comments"
-#     idea_id = Column(Integer, ForeignKey("ideas.id"))
-#     reply_to_id = Column(Integer)
-#     display_name = Column(String, nullable=False)
-#     content = Column(String, nullable=False)
-#     def to_dict(self):
-#         return {"id": self.id, "idea_id": self.idea_id, "reply_to_id": self.reply_to_id,
-#                 "display_name": self.display_name, "timestamp": self.timestamp}
-
 # Creating database engine for our table metadata
 engine = create_engine(config.db_url, echo=config.db_echo)
 
