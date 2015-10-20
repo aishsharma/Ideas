@@ -1,0 +1,9 @@
+#spinner {
+    vertical-align: middle;
+    text-align: center;
+    position: relative;
+}
+
+#content {
+    overflow: auto;
+}

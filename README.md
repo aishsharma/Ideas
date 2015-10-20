@@ -7,4 +7,7 @@ A website where people can post ideas for things they want to make or wish exist
 Bootstrap, Jquery and Sammy.js
 
 ##Back End:
-Python, Bottle.py, SQL Alchemy and SQLite
+Python, Bottle.py and SQL Alchemy
+
+##Database:
+SQLite

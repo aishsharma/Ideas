@@ -1,6 +1,6 @@
 //Any app config variables go here
 var config = {
-	API_URL: "http://0.0.0.0:8080/api/",
+	API_URL: "http://localhost:8080/api/",
 	TEMPLATES: "templates/",
 	CONSTANTS: {
 		BROWSE: "Get All Ideas in database.",
@@ -14,22 +14,67 @@ var config = {
 
 //Loads content from views
 function loadContent(path) {
+	//Showing a load spinner till all ajax is completed	
+	$("#content").html("<div id='spinner'><i class='fa fa-spinner fa-pulse fa-5x'></i></div>");
+
 	//Getting html from template file
 	var templateHtml;
 
-	//TODO: get data for template.
-	var templateData = Idea.getTemplateData(path);
+	//Get data for template.
+	var templateData;
+
+	//Get name of service.
+	var service = Idea.getService(path);
 
 	//Getting template
 	$.get(config.TEMPLATES + path, function(html) {
 			templateHtml = html;
 		}, "html")
 		.done(function() {
-			//Compiling template.
-			var template = Handlebars.compile(templateHtml);
+			if (service != null) {
+				//Getting template data
+				$.getJSON(config.API_URL + service, function() {
+						console.log("Ajax success while getting all ideas");
+					})
+					.done(function(data) {
+						console.log("Data retrieved successfully while getting all ideas");
+						templateData = data;
 
-			//Adding html to my web page
-			$("#content").html(template(templateData));
+						//Compiling template.
+						var template = Handlebars.compile(templateHtml);
+
+						//Adding html to my web page
+						$("#content").html(template(templateData));
+
+						if (templateData.error != null || templateData.error != "") {
+							$("#lblError").hide();
+						}
+
+					})
+					.fail(function() {
+						console.log("Data could not be retrieved failed while getting ideas.");
+						results = {
+							"status": 400,
+							"error": "Ajax request failed"
+						};
+
+						templateData = results;
+
+						//Compiling template.
+						var template = Handlebars.compile(templateHtml);
+
+						//Adding html to my web page
+						$("#content").html(template(templateData));
+
+					});
+			} else {
+				//No service needed. Just return HTML from view.
+				//Compiling template.
+				var template = Handlebars.compile(templateHtml);
+
+				//Adding html to my web page
+				$("#content").html(template(templateData));
+			}
 		});
 }
 
@@ -59,12 +104,12 @@ $(function() {
 
 //Library of custom functions is here
 var Idea = Idea || {};
-Idea.getTemplateData = function(path) {
+Idea.getService = function(path) {
 	var service = Idea.getServiceConstant(path);
 
 	switch (service) {
 		case config.CONSTANTS.BROWSE:
-			return Idea.api.getData("getAllIdeas").data;
+			return "getAllIdeas"
 			break;
 		default:
 			return null;
@@ -74,28 +119,82 @@ Idea.getTemplateData = function(path) {
 Idea.getServiceConstant = function(path) {
 	if (path.indexOf("browse") > -1) {
 		return config.CONSTANTS.BROWSE;
+	} else {
+		return config.CONSTANTS.IGNORE;
 	}
 };
 
-//API calls go here
-Idea.api = Idea.api || {};
-Idea.api.getData = function(serviceURI) {
-	var results;
+//Getting idea information as a modal for the calling page.
+Idea.getIdea = function(id) {
+	
+	//Remove old modal.
+	var modal = $("#ideaModal");
+	if (modal != null) {
+		modal.remove();
+	}
+	
+	//Getting html from template file
+	var templateHtml;
 
-	$.getJSON(config.API_URL + serviceURI, function() {
-			console.log("Ajax success while getting all ideas");
-		})
-		.done(function(data) {
-			console.log("Data retrieved successfully while getting all ideas");
-			results = data;
-			return results;
-		})
-		.fail(function() {
-			console.log("Ajax request failed while getting ideas.");
-			results = {
-				"status": 400,
-				"error": "Ajax request failed"
-			};
-			return results;
+	//Get data for template.
+	var templateData;
+
+	//Get name of service.
+	var service = "getIdea/" + id;
+
+	//Getting template
+	$.get(config.TEMPLATES + "idea.html", function(html) {
+			templateHtml = html;
+		}, "html")
+		.done(function() {
+			//Getting template data
+			$.getJSON(config.API_URL + service, function() {
+					console.log("Ajax success while getting all ideas");
+				})
+				.done(function(data) {
+					console.log("Data retrieved successfully while getting all ideas");
+					templateData = data.data;
+
+					//Compiling template.
+					var template = Handlebars.compile(templateHtml);
+
+					//Adding html to my web page
+					$("#content").append(template(templateData));
+
+					//Idea Modal Options
+					var options = {
+						"backdrop": "static",
+						"keyboard": "true",
+						"show": "true"
+					};
+
+					//Show modal
+					$("#ideaModal").modal(options);
+				})
+				.fail(function() {
+					console.log("Data could not be retrieved failed while getting ideas.");
+					results = {
+						"title": "Error",
+						"details": "Could not retreive the idea."
+					};
+
+					templateData = results;
+
+					//Compiling template.
+					var template = Handlebars.compile(templateHtml);
+
+					//Adding html to my web page
+					$("#content").append(template(templateData));
+
+					//Idea Modal Options
+					var options = {
+						"backdrop": "static",
+						"keyboard": "true",
+						"show": "true"
+					};
+
+					//Show modal
+					$("#ideaModal").modal(options);
+				})
 		});
 };

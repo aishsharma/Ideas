@@ -1,4 +1,4 @@
-from bottle import get, post, request
+from bottle import get, post, request, route, static_file
 from controllers import IdeaController
 
 
@@ -25,3 +25,19 @@ def new_idea():
 @get("/api/search/<text>")
 def search(text):
     return IdeaController.search(text)
+
+
+# Route to serve static files
+@route('/')
+def index():
+    return static_file("index.html", root="Web")
+
+
+@route('/:filename#.*#')
+def static(filename):
+    return static_file(filename, root="Web")
+
+
+@error
+def error():
+    return static_file("404.html", root="Web")
