@@ -8,14 +8,15 @@ var config = {
 		ADD: "Add a new idea to the database.",
 		SEARCH: "Search for an idea in the database",
 		IGNORE: "No API data required"
-	}
+	},
+	LOADSPINNER: "<div id='spinner'><i class='fa fa-spinner fa-pulse fa-5x'></i></div>"
 };
 
 
 //Loads content from views
 function loadContent(path) {
 	//Showing a load spinner till all ajax is completed	
-	$("#content").html("<div id='spinner'><i class='fa fa-spinner fa-pulse fa-5x'></i></div>");
+	$("#content").html(config.LOADSPINNER);
 
 	//Getting html from template file
 	var templateHtml;
@@ -104,13 +105,20 @@ $(function() {
 
 //Library of custom functions is here
 var Idea = Idea || {};
+
+//Returns REST service name
 Idea.getService = function(path) {
 	var service = Idea.getServiceConstant(path);
 
 	switch (service) {
 		case config.CONSTANTS.BROWSE:
-			return "getAllIdeas"
-			break;
+			return "getAllIdeas";
+		case config.CONSTANTS.SEARCH:
+			return "search/";
+		case config.CONSTANTS.GET:
+			return "getIdea/";
+		case config.CONSTANTS.ADD:
+			return "newIdea";
 		default:
 			return null;
 	}
@@ -119,6 +127,8 @@ Idea.getService = function(path) {
 Idea.getServiceConstant = function(path) {
 	if (path.indexOf("browse") > -1) {
 		return config.CONSTANTS.BROWSE;
+	} else if (path.indexOf("search") > -1) {
+		return config.CONSTANTS.SEARCH;
 	} else {
 		return config.CONSTANTS.IGNORE;
 	}
@@ -126,20 +136,20 @@ Idea.getServiceConstant = function(path) {
 
 //Getting idea information as a modal for the calling page.
 Idea.getIdea = function(id) {
-	
+
 	//Remove old modal.
 	var modal = $("#ideaModal");
 	if (modal != null) {
 		modal.remove();
 	}
-	
+
 	//Getting html from template file
 	var templateHtml;
 
 	//Get data for template.
 	var templateData;
 
-	//Get name of service.
+	//Name of service.
 	var service = "getIdea/" + id;
 
 	//Getting template
@@ -195,6 +205,68 @@ Idea.getIdea = function(id) {
 
 					//Show modal
 					$("#ideaModal").modal(options);
+				})
+		});
+};
+
+//Searching for an Idea
+Idea.search = function() {
+	var searchText = $("#search").val();
+	
+	if (searchText === "") {
+		loadContent("browse.html");
+		return;
+	}
+
+	$("#results").html(config.LOADSPINNER);
+
+	//Getting html from template file
+	var templateHtml;
+
+	//Get data for template.
+	var templateData;
+
+	//Name of service.
+	var service = "search/" + searchText;
+
+	//Getting template
+	$.get(config.TEMPLATES + "search_results.html", function(html) {
+			templateHtml = html;
+		}, "html")
+		.done(function() {
+			//Getting template data
+			$.getJSON(config.API_URL + service, function() {
+					console.log("Ajax success while getting all ideas");
+				})
+				.done(function(data) {
+					console.log("Data retrieved successfully while getting all ideas");
+					templateData = data;
+
+					//Compiling template.
+					var template = Handlebars.compile(templateHtml);
+
+					//Adding html to my web page
+					$("#results").html(template(templateData));
+					
+					if (templateData.error != null || templateData.error != "") {
+							$("#lblError").hide();
+						}
+				})
+				.fail(function() {
+					console.log("Data could not be retrieved failed while getting ideas.");
+					results = {
+						"status": 400,
+						"error": "Ajax request, could not retrieve search results."
+					};
+
+					templateData = results;
+
+					//Compiling template.
+					var template = Handlebars.compile(templateHtml);
+
+					//Adding html to my web page
+					$("#results").html(template(templateData));
+
 				})
 		});
 };

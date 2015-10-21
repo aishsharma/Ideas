@@ -1,0 +1,13 @@
+<label id="lblError" class="alert alert-danger">
+	{{error}}
+</label>
+
+<ul class="list-group">
+	{{#data}}
+
+	<li class="list-group-item" onclick="Idea.getIdea({{id}});return false;">
+		{{title}}
+	</li>
+
+	{{/data}}
+</ul>

@@ -1,6 +1,5 @@
-from bottle import get, post, request, route, static_file
+from bottle import get, post, request, route, static_file, error
 from controllers import IdeaController
-
 
 __author__ = 'Aishwarya Sharma'
 
@@ -23,7 +22,8 @@ def new_idea():
 
 
 @get("/api/search/<text>")
-def search(text):
+def search(text=None):
+    print("Text: " + text)
     return IdeaController.search(text)
 
 

@@ -1,4 +1,5 @@
 # For SQL Alchemy ORM
+from sqlalchemy import or_
 from models.IdeaModels import Base, Idea
 
 __author__ = 'Aishwarya Sharma'
@@ -13,8 +14,12 @@ def get_idea(idea_id, session):
 
 
 def search(text, session):
-    return [element.to_dict() for element in session.query(Idea).filter(Idea.title.like("%" + text + "%"))
-            .order_by(Idea.timestamp.desc()).all()]
+    if text is None or text is "":
+        return get_idea(session)
+    else:
+        return [element.to_dict() for element in session.query(Idea).filter(or_(Idea.title.like("%" + text + "%")
+                                                                                , Idea.details.like(
+                "%" + text + "%"))).order_by(Idea.timestamp.desc()).all()]
 
 
 def delete_idea(idea_id, session):
