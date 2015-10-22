@@ -1,0 +1,1 @@
+..\Idea-env\Scripts\python run.py
