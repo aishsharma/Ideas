@@ -6,7 +6,7 @@ var config = {
 		BROWSE: "getAllIdeas",
 		GET: "getIdea",
 		ADD: "newIdea",
-		SEARCH: "Search for an idea in the database",
+		SEARCH: "search",
 		IGNORE: "No API data required"
 	},
 	LOADSPINNER: "<div id='spinner'><i class='fa fa-spinner fa-pulse fa-5x'></i></div>"
