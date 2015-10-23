@@ -2,12 +2,12 @@
 	<div class="panel-heading"><strong> Post your idea! </strong></div>
 	<div class="panel-body">
 
-		<form action="" method="post" class="form-group" role="form">
-			<input type="text" id="title" class="form-control" placeholder="Title" />
+		<form id="newIdeaForm" method="post" class="form-group" role="form">
+			<input type="text" id="title" name="title" class="form-control" placeholder="Title" />
 			<br/>
-			<textarea rows="5" id="description" class="form-control" placeholder="Description"></textarea>
+			<textarea rows="5" id="details" name="details" class="form-control" placeholder="Description"></textarea>
 			<br/>
-			<input type="submit" class="btn btn-primary" value="Submit" />
+			<button class="btn btn-primary" onclick="Idea.newIdea(); return false;">Submit</button>
 		</form>
 
 	</div>
