@@ -23,7 +23,7 @@ the "installer.bat" or "installer.sh1" script files. Both files do the same
 thing so you only need to run one of them.
 
 To start the site, go into the src folder and run any one of the "run" files.
-You can now navigate to the http://localhost:8080
+You can now navigate to http://localhost:8080 in your browser to access the site.
 
 If you don't want to run it in a virtual environment, simply edit the batch/powershell files
 appropriately.
