@@ -4,6 +4,7 @@ from controllers import IdeaController
 __author__ = 'Aishwarya Sharma'
 
 
+# REST API routes
 @get("/api/getAllIdeas")
 def get_all_ideas():
     return IdeaController.get_ideas()
@@ -25,6 +26,12 @@ def new_idea():
 def search(text=None):
     print("Text: " + text)
     return IdeaController.search(text)
+
+
+@post("/api/login")
+def login():
+    username = request.forms.get("username")
+    password = request.forms.get("password")
 
 
 # Route to serve static files

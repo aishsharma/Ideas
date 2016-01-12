@@ -28,6 +28,11 @@ var app = $.sammy("#content", function() {
 	this.get("#/post", function(context) {
 		Idea.loadContent("post.html")
 	});
+	
+	//Login to site
+	this.get("#/login", function(context) {
+		Idea.loadContent("login.html");
+	});
 });
 
 //Starts the Sammy app on page load
